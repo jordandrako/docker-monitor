@@ -15,10 +15,11 @@ RUN apt-get install -y --no-install-recommends \
     mosquitto-clients
 
 RUN git clone https://github.com/andrewjfreyer/monitor.git /monitor
+RUN mkdir /config
 
 VOLUME ["/monitor", "/config"}
 
-#COPY entry.sh behavior_preferences mqtt_preferences known_beacon_addresses known_static_addresses address_blacklist /monitor
+COPY ./config/* /config/
 COPY run.sh /
 RUN chmod +x /run.sh
 ENTRYPOINT ["/run.sh"]
