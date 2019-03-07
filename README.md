@@ -15,7 +15,7 @@ docker run --name monitor -d \
   --privileged \
   - v /etc/localtime:/etc/localtime:ro \
   - v /path/to/config:/config \
-  jordandrako/presence
+  jordandrako/presence:monitor
 ```
 
 Docker-compose:
@@ -25,7 +25,7 @@ version: "3"
 
 services:
   monitor:
-    image: jordandrako/presence
+    image: jordandrako/presence:monitor
     container_name: monitor
     restart: unless-stopped
     network_mode: host
