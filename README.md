@@ -4,7 +4,7 @@ Implements [andrewjfreyer's presence script](https://github.com/andrewjfreyer/pr
 
 ## Usage
 
-Create the config files (owner_devices & mqtt_preferences) as described [here](https://github.com/andrewjfreyer/presence).
+Create the config files (`owner_devices` & `mqtt_preferences`) as described [here](https://github.com/andrewjfreyer/presence).
 
 Run:
 
@@ -32,6 +32,8 @@ services:
       - /path/to/config/mqtt_preferences:/presence/mqtt_preferences:ro
       - /path/to/config/behavior_preferences:/presence/behavior_preferences
 ```
+
+## Configuration
 
 If you need to customize the behavior of `presence` create the `behavior_preferences` file. Here is the default config:
 
