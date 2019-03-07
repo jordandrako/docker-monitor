@@ -13,7 +13,6 @@ docker run --name presence -d \
   --restart always \
   - v /path/to/config/owner_devices:/presence/owner_devices:ro \
   - v /path/to/config/mqtt_preferences:/presence/mqtt_preferences:ro \
-  - v /path/to/config/behavior_preferences:/presence/behavior_preferences \
   jordandrako/presence
 ```
 
@@ -30,7 +29,6 @@ services:
     volumes:
       - /path/to/config/owner_devices:/presence/owner_devices:ro
       - /path/to/config/mqtt_preferences:/presence/mqtt_preferences:ro
-      - /path/to/config/behavior_preferences:/presence/behavior_preferences
 ```
 
 ## Configuration
