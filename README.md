@@ -5,24 +5,6 @@ Implements [andrewjfreyer's presence script](https://github.com/andrewjfreyer/pr
 ## Usage
 
 Create the config files (owner_devices & mqtt_preferences) as described [here](https://github.com/andrewjfreyer/presence).
-The script tries to create the `behavior_preferences` file but doesn't succeed, so create it yourself with these contents (default):
-
-```
-#DELAY BETWEEN SCANS OF OWNER DEVICES WHEN AWAY FROM HOME
-delay_between_owner_scans_away=6
-
-#DELAY BETWEEN SCANS OF OWNER DEVICES WHEN HOME
-delay_between_owner_scans_present=30
-
-#HOW MANY VERIFICATIONS ARE REQUIRED TO DETERMINE A DEVICE IS AWAY
-verification_of_away_loop_size=6
-
-#HOW LONG TO DELAY BETWEEN VERIFICATIONS THAT A DEVICE IS AWAY
-verification_of_away_loop_delay=3
-
-#PREFERRED HCI DEVICE
-hci_device='hci0'
-```
 
 Run:
 
@@ -49,4 +31,29 @@ services:
       - /path/to/config/owner_devices:/presence/owner_devices:ro
       - /path/to/config/mqtt_preferences:/presence/mqtt_preferences:ro
       - /path/to/config/behavior_preferences:/presence/behavior_preferences
+```
+
+If you need to customize the behavior of `presence` create the `behavior_preferences` file. Here is the default config:
+
+```
+#DELAY BETWEEN SCANS OF OWNER DEVICES WHEN AWAY FROM HOME
+delay_between_owner_scans_away=6
+
+#DELAY BETWEEN SCANS OF OWNER DEVICES WHEN HOME
+delay_between_owner_scans_present=30
+
+#HOW MANY VERIFICATIONS ARE REQUIRED TO DETERMINE A DEVICE IS AWAY
+verification_of_away_loop_size=6
+
+#HOW LONG TO DELAY BETWEEN VERIFICATIONS THAT A DEVICE IS AWAY
+verification_of_away_loop_delay=3
+
+#PREFERRED HCI DEVICE
+hci_device='hci0'
+```
+
+Then add it as a volume:
+
+```bash
+-v /path/to/config/behavior_preferences:/presence/behavior_preferences
 ```
