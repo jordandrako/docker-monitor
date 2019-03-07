@@ -1,18 +1,20 @@
 # docker-presence
 
-Implements [andrewjfreyer's presence script](https://github.com/andrewjfreyer/presence). `presence` is bluetooth-based presence detection useful for mqtt-based home automation.
+Implements [andrewjfreyer's monitor script](https://github.com/andrewjfreyer/monitor). `monitor` is bluetooth-based presence detection useful for mqtt-based home automation.
 
 ## Usage
 
-Create the config files (`owner_devices` & `mqtt_preferences`) as described [here](https://github.com/andrewjfreyer/presence).
+Create your config files (at least `known_static_addresses` and `mqtt_preferences`) as shown [here](https://github.com/andrewjfreyer/monitor#configuration-and-setup).
 
 Run:
 
 ```bash
-docker run --name presence -d \
-  --restart always \
-  - v /path/to/config/owner_devices:/presence/owner_devices:ro \
-  - v /path/to/config/mqtt_preferences:/presence/mqtt_preferences:ro \
+docker run --name monitor -d \
+  --restart unless-stopped \
+  --network host \
+  --privileged \
+  - v /etc/localtime:/etc/localtime:ro \
+  - v /path/to/config:/config \
   jordandrako/presence
 ```
 
@@ -22,38 +24,45 @@ Docker-compose:
 version: "3"
 
 services:
-  presence:
+  monitor:
     image: jordandrako/presence
-    container_name: presence
-    restart: always
+    container_name: monitor
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
     volumes:
-      - /path/to/config/owner_devices:/presence/owner_devices:ro
-      - /path/to/config/mqtt_preferences:/presence/mqtt_preferences:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /path/to/config:/config
 ```
 
 ## Configuration
 
-If you need to customize the behavior of `presence` create the `behavior_preferences` file. Here is the default config:
+If you need to customize the behavior of `monitor` create the `behavior_preferences` file. Here is the default config:
 
 ```
-#DELAY BETWEEN SCANS OF OWNER DEVICES WHEN AWAY FROM HOME
-delay_between_owner_scans_away=6
+# ---------------------------
+#
+# BEHAVIOR PREFERENCES
+#
+# ---------------------------
 
-#DELAY BETWEEN SCANS OF OWNER DEVICES WHEN HOME
-delay_between_owner_scans_present=30
+#MAX RETRY ATTEMPTS FOR ARRIVAL
+PREF_ARRIVAL_SCAN_ATTEMPTS=1
 
-#HOW MANY VERIFICATIONS ARE REQUIRED TO DETERMINE A DEVICE IS AWAY
-verification_of_away_loop_size=6
+#MAX RETRY ATTEMPTS FOR DEPART
+PREF_DEPART_SCAN_ATTEMPTS=2
 
-#HOW LONG TO DELAY BETWEEN VERIFICATIONS THAT A DEVICE IS AWAY
-verification_of_away_loop_delay=3
+#SECONDS UNTIL A BEACON IS CONSIDERED EXPIRED
+PREF_BEACON_EXPIRATION=240
 
-#PREFERRED HCI DEVICE
-hci_device='hci0'
-```
+#MINIMUM TIME BEWTEEN THE SAME TYPE OF SCAN (ARRIVE SCAN, DEPART SCAN)
+PREF_MINIMUM_TIME_BETWEEN_SCANS=15
 
-Then add it as a volume:
+#ARRIVE TRIGGER FILTER(S)
+PREF_PASS_FILTER_ADV_FLAGS_ARRIVE=".*"
+PREF_PASS_FILTER_MANUFACTURER_ARRIVE=".*"
 
-```bash
--v /path/to/config/behavior_preferences:/presence/behavior_preferences
+#ARRIVE TRIGGER NEGATIVE FILTER(S)
+PREF_FAIL_FILTER_ADV_FLAGS_ARRIVE="NONE"
+PREF_FAIL_FILTER_MANUFACTURER_ARRIVE="NONE"
 ```
