@@ -17,7 +17,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN git clone https://github.com/andrewjfreyer/monitor.git /monitor
 RUN mkdir /config
 
-VOLUME ["/monitor", "/config"}
+VOLUME ["/monitor", "/config"]
 
 COPY ./config/* /config/
 COPY run.sh /
