@@ -1,16 +1,28 @@
-FROM debian:jessie
+FROM debian:stretch-slim
 LABEL Maintainer="Jordan Janzen <https://github.com/jordandrako>"
 
-RUN apt-get update && apt-get install -y mosquitto mosquitto-clients git bluez bluez-hcidump bc
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
+    bash \
+    bluetooth \
+    bluez \
+    bluez-hcidump \
+    bc \
+    usbutils \
+    git \
+    curl \
+    ca-certificates \
+    mosquitto-clients
 
-RUN cd / &&  git clone https://github.com/andrewjfreyer/monitor
+RUN git clone https://github.com/andrewjfreyer/monitor.git /monitor
 
-ENV PATH /usr/sbin:$PATH
+VOLUME ["/monitor", "/config"}
 
-VOLUME /monitor
+#COPY entry.sh behavior_preferences mqtt_preferences known_beacon_addresses known_static_addresses address_blacklist /monitor
+COPY run.sh /
+RUN chmod +x /run.sh
+ENTRYPOINT ["/run.sh"]
 
 WORKDIR /monitor
 
-COPY behavior_preferences mqtt_preferences known_beacon_addresses known_static_addresses address_blacklist ./
-
-CMD ["/bin/bash","monitor.sh"]
+CMD ["/bin/bash", "monitor.sh", "-D", "/config"]
