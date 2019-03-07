@@ -1,16 +1,16 @@
-FROM alpine:3.7
+FROM debian:jessie
 LABEL Maintainer="Jordan Janzen <https://github.com/jordandrako>"
 
-RUN apk update && apk --no-cache add bash mosquitto mosquitto-clients git && \
-    cd / && \
-    git clone https://github.com/andrewjfreyer/presence
+RUN apt-get update && apt-get install -y mosquitto mosquitto-clients git bluez bluez-hcidump bc
+
+RUN cd / &&  git clone https://github.com/andrewjfreyer/monitor
 
 ENV PATH /usr/sbin:$PATH
 
-VOLUME /presence
+VOLUME /monitor
 
-WORKDIR /presence
+WORKDIR /monitor
 
-COPY behavior_preferences .
+COPY behavior_preferences mqtt_preferences known_beacon_addresses known_static_addresses address_blacklist ./
 
-CMD ["/bin/bash","presence.sh"]
+CMD ["/bin/bash","monitor.sh"]
