@@ -11,4 +11,6 @@ VOLUME /presence
 
 WORKDIR /presence
 
+COPY behavior_preferences .
+
 CMD ["/bin/bash","presence.sh"]
