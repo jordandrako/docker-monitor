@@ -1,6 +1,6 @@
 # docker-monitor
 
-Implements [andrewjfreyer's monitor script](https://github.com/andrewjfreyer/monitor). `monitor` is bluetooth-based presence detection useful for mqtt-based home automation.
+Implements andrewjfreyer's monitor script: [https://github.com/andrewjfreyer/monitor](https://github.com/andrewjfreyer/monitor). `monitor` is bluetooth-based presence detection useful for mqtt-based home automation.
 
 ## Usage
 
